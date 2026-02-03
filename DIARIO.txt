@@ -39,7 +39,7 @@ Affine gap: pide la penalización por abrir un gap y otra por extenderlo, por ab
 
 #####2026-02-03: Práctica 2
 
-
+Rm -rf .git -> destruir el git
 
 
 
