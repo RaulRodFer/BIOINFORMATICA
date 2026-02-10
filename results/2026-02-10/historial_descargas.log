@@ -1,0 +1,44 @@
+--2026-02-10 16:16:50--  ftp://ftp.sra.ebi.ac.uk/vol1/fastq/DRR025/DRR025089/DRR025089_1.fastq.gz
+           => «DRR025089_1.fastq.gz.1»
+Resolviendo ftp.sra.ebi.ac.uk (ftp.sra.ebi.ac.uk)... 193.62.193.165
+Conectando con ftp.sra.ebi.ac.uk (ftp.sra.ebi.ac.uk)[193.62.193.165]:21... conectado.
+Identificándose como anonymous ... ¡Dentro!
+==> SYST ... hecho.   ==> PWD ... hecho.
+==> TYPE I ... hecho.  ==> CWD (1) /vol1/fastq/DRR025/DRR025089 ... hecho.
+==> SIZE DRR025089_1.fastq.gz ... 75090152
+==> PASV ... hecho.   --2026-02-10 16:16:50--  ftp://ftp.sra.ebi.ac.uk/vol1/fastq/DRR025/DRR025089/DRR025089_1.fastq.gz
+           => «.listing»
+==> CWD (1) /vol1/fastq/DRR025/DRR025089 ... hecho.
+==> PASV ... hecho.   ==> LIST ... hecho.
+
+     0K                                                        28,8K=0,009s
+
+«.listing» eliminado.
+
+El fichero «DRR025089_1.fastq.gz» existe.
+--2026-02-10 16:18:41--  ftp://ftp.sra.ebi.ac.uk/vol1/fastq/DRR025/DRR025089/DRR025089_2.fastq.gz
+           => «DRR025089_2.fastq.gz.1»
+Resolviendo ftp.sra.ebi.ac.uk (ftp.sra.ebi.ac.uk)... 193.62.193.165
+Conectando con ftp.sra.ebi.ac.uk (ftp.sra.ebi.ac.uk)[193.62.193.165]:21... conectado.
+Identificándose como anonymous ... ¡Dentro!
+==> SYST ... hecho.   ==> PWD ... hecho.
+==> TYPE I ... hecho.  ==> CWD (1) /vol1/fastq/DRR025/DRR025089 ... hecho.
+==> SIZE DRR025089_2.fastq.gz ... 73916895
+==> PASV ... hecho.   --2026-02-10 16:18:41--  ftp://ftp.sra.ebi.ac.uk/vol1/fastq/DRR025/DRR025089/DRR025089_2.fastq.gz
+           => «.listing»
+==> CWD (1) /vol1/fastq/DRR025/DRR025089 ... hecho.
+==> PASV ... hecho.   ==> LIST ... hecho.
+
+     0K                                                        13,1M=0s
+
+«.listing» eliminado.
+
+El fichero «DRR025089_2.fastq.gz» existe.
+Modo arácnido activado. Comprobar si el fichero remoto existe.
+--2026-02-10 16:19:07--  https://www.ebi.ac.uk/ena/browser/api/fasta/GCA_042137995.2
+Resolviendo www.ebi.ac.uk (www.ebi.ac.uk)... 193.62.193.80
+Conectando con www.ebi.ac.uk (www.ebi.ac.uk)[193.62.193.80]:443... conectado.
+Petición HTTP enviada, esperando respuesta... 200 
+Longitud: no especificado [text/plain]
+El fichero remoto existe.
+
