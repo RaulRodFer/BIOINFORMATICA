@@ -1,0 +1,69 @@
+# Descargar el genoma que queremos ordenar en -bash.
+if [ ! -e  trypanosoma_annotated.txt ]; then
+datasets summary genome taxon Trypanosoma --annotated --as-json-lines | \
+dataformat tsv genome --fields \
+accession,organism-name,assminfo-release-date,assminfo-level,assmstats-atgc-count,annotinfo-featcount-gene-total,assminfo-type,assminfo-status > trypanosoma_annotated.txt
+fi
+
+#Leer el genoma descargado y poder descgarlo en una tabla .HTML
+library('kableExtra')
+genomas <- read.table('trypanosoma_annotated.txt',
+                      header = TRUE, sep = '\t')
+kable(genomas) %>% kable_styling()
+
+#Para ver cuántas líneas están duplicadas
+duplicados <- duplicated(genomas)
+print(duplicados)
+table(duplicados)
+
+#Ordenar la tabla según la fecha con order()
+# Observa que asignamos el resultado del ordenamiento al mismo objeto que
+# estamos ordenando, para guardar el resultado sin tener que generar otro objeto.
+genomas <- genomas[order(genomas$Assembly.Release.Date), ]
+kable(genomas) %>% kable_styling()
+#Para que las fechas sean entendidas como tales, podemos usar la función as.Date():y no como texto
+genomas$Assembly.Release.Date <- as.Date(genomas$Assembly.Release.Date,
+                                         '%Y-%m-%d')
+#Crear una tabla con las fechas ordenadas en el eje X, ahora se puede porque están ordenadas.
+# Aquí usamos "cumsum()" para obtener la suma acumulada del número de bases
+# secuenciadas.
+plot(x = genomas$Assembly.Release.Date,
+     y = cumsum(genomas$Assembly.Stats.ATGC.Count),
+     type = 'b',
+     xlab = 'Fecha de publicación',
+     ylab = 'Longitud total secuenciada (bp)',
+     main = 'Genomas anotados de Trypanosoma')
+# Decidimos descargar el genoma y la anotación funcional de una de ellas, por ejemplo GCA_022059095.1.
+
+if [ ! -e ncbi_data/data/GCA_022059095.1/genomic.gff ]; then
+if [ ! -e ncbi_dataset.zip ]; then
+datasets download genome accession GCA_022059095.1 --include genome,gff3
+fi
+unzip ncbi_dataset.zip
+fi
+#Para descomprimir la carpeta se usa gunzip desde terminal
+
+#Para ver mejor el contenido del archivo con la extensión jsonl, podríamos utilizar el programa jq, o bien utilizar la función prettify() del paquete jsonlite de R
+#No interesa mucho
+
+#Aunque existen funciones específicas para leer archivos GFF, usaremos la función básica read.table(), con alguna precaución.
+# Como no tiene cabecera, le damos los nombres de las columnas:
+gff <- read.table('ncbi_dataset/data/GCA_022059095.1/genomic.gff', sep = '\t',
+                  col.names = c('seqid', 'source', 'type', 'start', 'end',
+                                'score', 'strand', 'phase', 'attributes'),
+                  quote = '')
+
+#5 valores diferentes de la variable type: “CDS”, “exon”, “gene”, “mRNA” y “region”.
+#Puedes comprobarlo con unique(gff$type), o con table(gff$type). 
+#Podemos separar la tabla en cinco marcos de datos, que correspondan a esos cinco tipos de anotación funcional.
+# Usamos un vector booleano como índice de las filas.
+# En las tablas nuevas, no necesitamos la tercera columna
+# y la eliminamos con el "-3".
+
+gene   <- gff[gff$type == 'gene',   -3]
+mrna   <- gff[gff$type == 'mRNA',   -3]
+exon   <- gff[gff$type == 'exon',   -3]
+cds    <- gff[gff$type == 'CDS',    -3]
+region <- gff[gff$type == 'region', -3]
+
+# Alinear las órdenes nos ayuda a detectar posibles errores
