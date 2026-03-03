@@ -5,8 +5,7 @@ date: today
 execute: 
   output: true
   error: true
-engine: knitr
-bibliography: ../../references.bib
+bibliography: ../../doc/references.bib
 language:
    title-block-published: "Última actualización:"
    section-title-references: "Bibliografía"
@@ -172,8 +171,8 @@ query  <- 'query=tax_tree(7215) AND description="alcohol dehydrogenase"&'
 fields <- 'fields=accession,tax_id,scientific_name,base_count,first_public,description&'
 limit  <- 'limit=0'
 format <- 'format=tsv&'
-URL <- paste0(portal, result, query, fields, format, limit)
-curl_download(URLencode(URL), destfile = 'z3.txt')
+URL1 <- paste0(portal, result, query, fields, format, limit)
+curl_download(URLencode(URL1), destfile = 'z3.txt')
 ```
 # Trabajar con los resultados
 La función `read.table()` de R nos permite leer un archivo (o una URL) para crear
