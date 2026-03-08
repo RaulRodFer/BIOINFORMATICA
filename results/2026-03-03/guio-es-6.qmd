@@ -268,15 +268,27 @@ kable(flatten(pfam00019[['results']][['metadata']])) %>%
 ## Ejercicio 5
 Intenta obtener una lista de los dominios de Pfam presentes en vertebrados
 (taxon 7742). Al menos, los 20 primeros.
-
-```{r}?????
-vertebrados <-  fromJSON(paste0(API, 'entry/taxonomy/uniprot/7742'))
-pfam_list <- vertebrados[[1]][['member_databases']][['pfam']]
-head(pfam_list,20)
+```{r}
+library(kableExtra)
+# Dominios Pfam presentes en vertebrados
+vertebrados <- fromJSON(paste0(API, 'entry/pfam/taxonomy/uniprot/7742'))
+# Número total de dominios encontrados
+vertebrados[['count']]
+# Mostrar los 20 primeros
+kable(flatten(vertebrados[['results']][['metadata']])) %>%
+  kable_styling()
 ```
 ## Ejercicio 6
 ¿Cuántas proteínas de cocodrilos (taxon 8493) conocemos con el dominio
 *zinc finger, C2HC type* (Pfam PF01530)?
+
+```{r}
+# Proteínas de cocodrilos con dominio PF01530
+cocodrilos <- fromJSON(paste0(API,
+                'protein/taxonomy/uniprot/8493/entry/pfam/PF01530'))
+# Número de proteínas
+str(cocodrilos)
+```
 :::
 
 # Apéndice. Cómo juntar todas las páginas que genera la API de Interpro
@@ -346,6 +358,7 @@ equinodermos que no aparecen en cordados. Vamos a comprobarlo con la función
 segundo:
 
 ```{r}
+library(kableExtra)
 SoloEquinodermos <- setdiff(equinodermata$accession, chordata$accession)
 # Del marco de datos "equinodermata" selecciono las filas que corresponden a los
 # dominios exclusivos de equinodermos, y las filas "accession" y "name":

@@ -135,6 +135,7 @@ curl_download('https://www.ebi.ac.uk/ena/portal/api/search?result=assembly&query
 En el primer bloque el enlace no está correctamente formatedo, presenta espacios, comas, etc. 
 El segundo bloque se formatea bien gracias al código URLencode. 
 La ventaja del tercer bloque es que es más visual y es más fácil de identificar en la búsqueda. 
+
 ```{r}
 curl_download(
   URLencode('https://www.ebi.ac.uk/ena/portal/api/search?result=assembly&query=tax_tree(6157) AND genome_representation="full"&fields=version,tax_id,scientific_name,last_updated,base_count&limit=0'),
@@ -159,11 +160,6 @@ Confecciona una URL para descargar una tabla de las secuencias codificantes de
 alcohol deshidrogenasas del género *Drosophila*, que te permita contestar las
 preguntas siguientes. Consulta el apéndice de este guión, si lo necesitas.
 
-1. ¿Cuántas secuencias hay con el término "alcohol dehydrogenase" en su descripción?
-2. ¿Qué longitudes tienen? 
-3. ¿De cuántas especies diferentes son estas secuencias?
-4. ¿Cuándo se publicaron las más recientes?
-:::
 ```{r}
 portal <- 'https://www.ebi.ac.uk/ena/portal/api/search?'
 result <- 'result=sequence&'
@@ -174,6 +170,30 @@ format <- 'format=tsv&'
 URL1 <- paste0(portal, result, query, fields, format, limit)
 curl_download(URLencode(URL1), destfile = 'z3.txt')
 ```
+En primer lugar, nombramos el objeto adh: 
+```{r}
+adh <- read.table('z3.txt', quote = "", header = TRUE, sep ="\t")
+```
+1. ¿Cuántas secuencias hay con el término "alcohol dehydrogenase" en su descripción?
+```{r}
+dim(adh)
+```
+2. ¿Qué longitudes tienen? 
+La media sería la longitud que tienen.
+```{r}
+summary(adh$base_count)
+```
+3. ¿De cuántas especies diferentes son estas secuencias?
+```{r}
+length(unique(adh$scientific_name))
+```
+
+4. ¿Cuándo se publicaron las más recientes?
+```{r}
+tail(sort(adh$first_public))
+```
+:::
+
 # Trabajar con los resultados
 La función `read.table()` de R nos permite leer un archivo (o una URL) para crear
 una tabla. Necesita que todas las filas tengan el mismo número de campos o columnas,
@@ -223,6 +243,18 @@ mtext('Base count', side = 2, line = 5)
 ¿De qué manera necesitarías transformar la tabla `platelmintos` para poder
 representar gráficamente la longitud acumulada de todas las secuencias
 disponibles a medida que se han ido publicando?
+
+```{r}
+# Ordenar la tabla por fecha de publicación
+platelmintos <- platelmintos[order(platelmintos$last_updated), ]
+# Crear una nueva columna con la suma acumulada de bases
+platelmintos$base_acumuladas <- cumsum(platelmintos$base_count)
+# Representar la longitud acumulada a lo largo del tiempo
+plot(platelmintos$last_updated, platelmintos$base_acumuladas,
+     type = "l",
+     xlab = "Fecha de publicación",
+     ylab = "Bases acumuladas")
+```
 :::
 
 # La API del navegador (*browser*) de ENA
@@ -245,6 +277,15 @@ curl_download(URL, destfile = 'Adh.fasta')
 :::{.callout-note icon=false}
 ## Ejercicio 4
 Intenta descargar esas mismas secuencias en formato EMBL.
+```{r}
+library(curl)
+portal    <- 'https://www.ebi.ac.uk/ena/browser/api/'
+formato   <- 'embl/'
+accession <- 'AAC39011,AAY25307,ABU44510,ABG56046,AAO06902'
+URL <- paste0(portal, formato, accession)
+URL
+curl_download(URL, destfile = 'Adh.embl')
+```
 :::
 
 # Apéndice
