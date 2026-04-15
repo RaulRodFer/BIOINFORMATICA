@@ -6,6 +6,7 @@ format:
 editor: 
   markdown: 
     wrap: 72
+bibliography: ../../doc/references.bib
 ---
 
 Una vez instalado el paquete phangorn y cargado los datos en el objeto

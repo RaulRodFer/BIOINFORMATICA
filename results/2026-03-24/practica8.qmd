@@ -3,20 +3,21 @@ title: "Práctica 8. BLAST"
 author: "Raúl RF"
 format: html
 editor: visual
+bibliography: ../../doc/references.bib
 ---
 
 Para instalar ncbi-blast+ en macOS se puede hacer desde el terminal ejecutando:
 
-```{bash}
+
 brew install blast
 blastn -version #verificar la instalación
-```
+
 
 datasets y dataformat ya se encuentran instalados de la práctica 4. Por último, se tiene que instalar Biostrings ejecutando:
 
-```{r}
+
 BiocManager::install('Biostrings')
-```
+
 
 ## Ejercicio 1. Identificación aproximada de ortólogos
 

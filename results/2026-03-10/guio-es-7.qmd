@@ -65,7 +65,7 @@ activamos el paquete `ggplot2`, que usaremos después.
 
 ```{r}
 library('ggplot2')
-gwas <- read.table('gwas.txt')
+gwas <- read.table('../../data/gwas.txt')
 ```
 
 ::: {.callout-note icon="false"}
@@ -76,7 +76,7 @@ arreglarla?
 
 ```{r}
 library('ggplot2')
-gwas <- read.delim('gwas.txt')
+gwas <- read.delim('../../data/gwas.txt')
 gwas <- gwas[!is.na(gwas$P),]
 ```
 
