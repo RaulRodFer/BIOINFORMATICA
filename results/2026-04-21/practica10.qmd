@@ -1,0 +1,98 @@
+---
+title: "practica10"
+format: html
+editor: visual
+bibliography: ../../doc/references.bib
+---
+
+## DATOS
+
+El primero paso es instalar hifiasm, no he podido hacerlo a través del código proporciondo usando git clone, poniendo el PATH bin, etc. Lo he instalado mediante conda, creando un entorno para poder trabajar con hifiasm.
+
+Con este código comprobamos que el entorno de conda está activo y nuestro codigo de rstudio está bajo este entorno.
+
+```{bash}
+conda info --envs
+```
+
+Una vez descargados también el archivo `At4.10.fa.gz` podemos empezar la práctica.
+
+## Revisión de los datos
+
+::: {.callout-note icon="false"}
+## Ejercicio 1
+
+¿Cuántas secuencias contiene el archivo? ¿Qué longitudes mínima, media y máxima tienen las secuencias? ¿Cuál es el número total de bases?
+
+Lo primero que he hecho es descargar seqkit, una herramienta que trabaja con arhivos FASTA y FASTQ. Obtengo todas estas preguntas poniendo el siguiente comando:
+
+```{bash}
+seqkit stats ../../data/At4.10.fa.gz
+```
+
+num_seqs = cuantas secuencias sum_len = número total de bases min_len = longitud mínima avg_len = longitud media max_len = longitud máxima
+
+Si se estimara que el genoma a ensamblar fuera de sólo 19 millones de bases, ¿cuál sería la cobertura esperada?
+
+Cobertura = Total de bases/ Tamaño del genoma
+
+```{r}
+250599484/19000000
+```
+:::
+
+## Ensamblaje
+
+```{bash}
+# Con la ejecución condicional nos ahorramos algún mensaje de error:
+if [ ! -d asm1 ]; then mkdir asm1; fi
+```
+
+La siguiente condición la usamos para no tener que ejecutar la línea anterior cada vez que compilamos el documento de Quarto.
+
+```{bash}
+if [ ! -e asm1/At4.bp.p_ctg.gfa ]; then
+   hifiasm -o asm1/At4 -t 2 -f 0 ../../data/At4.10.fa.gz 2> asm1/hifiasm.log
+fi
+```
+
+::: {.callout-note icon="false"}
+
+## Ejercicio 2
+Consulta la ayuda de `hifiasm` (`hifiasm -h`) y contesta las preguntas siguientes:
+
+¿Los parámetros corresponden al ensamblaje de un genoma haploide o diploide?
+
+Los parámetros corresponden a un ensamblaje diploide, ya que hifiasm está diseñado para separar haplotipos materno y paterno.
+
+¿Qué nivel de eliminación de duplicaciones hemos aplicado? (El paso de eliminar duplicaciones sirve para que las zonas de alta heterocigosidad no sean ensambladas como contigs diferentes).
+
+En el comando del ensamblaje aparece -f 0, eso significa que no hay eliminación de duplicaciones.
+
+Si tuvieramos lecturas ultra-largas, ¿con qué opción o argumento añadiríamos esa información?
+
+Se añadirían mediante la opción --ul, que permite incorporar lecturas ultra-largas al ensamblaje.
+:::
+
+## Evaluación del resultado
+
+::: {.callout-note icon="false"}
+
+## Ejercicio 3
+Consulta la descripción de los archivos de salida que encontrarás en este enlace y contesta las preguntas siguientes:
+
+¿Dónde están las secuencias que componen el ensamblaje?
+
+En los archivos .gfa, ¿qué son las líneas que empiezan por ‘A’?
+
+¿Qué información tiene los archivos .bed?
+
+¿Cuál es la cobertura media estimada de las secuencias homocigotas?
+
+¿Y la de las heterocigotas?
+:::
+
+
+
+
+
